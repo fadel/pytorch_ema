@@ -7,6 +7,12 @@ This library was written for personal use. Nevertheless, if you run into issues
 or have suggestions for improvement, feel free to open either a new issue or
 pull request.
 
+## Installation
+
+```
+pip install -U git+https://github.com/fadel/pytorch_ema
+```
+
 ## Example
 
 ```python
