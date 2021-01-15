@@ -54,6 +54,22 @@ class ExponentialMovingAverage:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             updated with the stored moving averages.
         """
+        self.collected_parameters = []
         for s_param, param in zip(self.shadow_params, parameters):
+            self.collected_parameters.append(param.clone())
             if param.requires_grad:
                 param.data.copy_(s_param.data)
+
+    def restore(self, parameters):
+        """
+        Restore the parameters given to the copy_to function. 
+        Usually used in validation. Want to validate the model with EMA parameters without affecting the original optimization process.
+
+        Args: 
+          parameters: Iterable of `torch.nn.Parameter`; the parameters to be
+            updated with the stored original parameters.
+        """
+        for s_param, param in zip(self.collected_parameters, parameters):
+            if param.requires_grad:
+                param.data.copy_(s_param.data)
+
