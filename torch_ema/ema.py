@@ -66,7 +66,7 @@ class ExponentialMovingAverage:
 
         Args: 
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
-            updated with the stored moving averages.
+            temporary stored in.
         """
         self.collected_parameters = []
         for param in parameters:
@@ -81,7 +81,7 @@ class ExponentialMovingAverage:
 
         Args: 
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
-            updated with the stored moving averages.
+            updated with the stored parameters.
         """
         for c_param, param in zip(self.collected_parameters, parameters):
             if param.requires_grad:
