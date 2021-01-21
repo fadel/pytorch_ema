@@ -60,16 +60,30 @@ class ExponentialMovingAverage:
             if param.requires_grad:
                 param.data.copy_(s_param.data)
 
-    def restore(self, parameters):
+    def store(self, parameters):
         """
-        Restore the parameters given to the copy_to function. 
-        Usually used in validation. Want to validate the model with EMA parameters without affecting the original optimization process.
+        Save the current parameters for restore.
 
         Args: 
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
-            updated with the stored original parameters.
+            updated with the stored moving averages.
         """
-        for s_param, param in zip(self.collected_parameters, parameters):
+        self.collected_parameters = []
+        for param in parameters:
+            self.collected_parameters.append(param.clone())
+
+    def restore(self, parameters):
+        """
+        Restore the parameters from the `store` function.
+        Usually used in validation. Want to validate the model with EMA parameters without affecting the original optimization process.
+        Store the parameters before the `copy_to` function.
+        After the validation(or model saving), restore the former parameters.
+
+        Args: 
+          parameters: Iterable of `torch.nn.Parameter`; the parameters to be
+            updated with the stored moving averages.
+        """
+        for c_param, param in zip(self.collected_parameters, parameters):
             if param.requires_grad:
-                param.data.copy_(s_param.data)
+                param.data.copy_(c_param.data)
 
