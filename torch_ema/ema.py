@@ -20,6 +20,7 @@ class ExponentialMovingAverage:
         """
         if decay < 0.0 or decay > 1.0:
             raise ValueError('Decay must be between 0 and 1')
+        self.collected_parameters = []
         self.decay = decay
         self.num_updates = 0 if use_num_updates else None
         self.shadow_params = [p.clone().detach()
@@ -57,3 +58,31 @@ class ExponentialMovingAverage:
         for s_param, param in zip(self.shadow_params, parameters):
             if param.requires_grad:
                 param.data.copy_(s_param.data)
+
+    def store(self, parameters):
+        """
+        Save the current parameters for restore.
+
+        Args: 
+          parameters: Iterable of `torch.nn.Parameter`; the parameters to be
+            temporary stored in.
+        """
+        self.collected_parameters = []
+        for param in parameters:
+            self.collected_parameters.append(param.clone())
+
+    def restore(self, parameters):
+        """
+        Restore the parameters from the `store` function.
+        Usually used in validation. Want to validate the model with EMA parameters without affecting the original optimization process.
+        Store the parameters before the `copy_to` function.
+        After the validation(or model saving), restore the former parameters.
+
+        Args: 
+          parameters: Iterable of `torch.nn.Parameter`; the parameters to be
+            updated with the stored parameters.
+        """
+        for c_param, param in zip(self.collected_parameters, parameters):
+            if param.requires_grad:
+                param.data.copy_(c_param.data)
+
