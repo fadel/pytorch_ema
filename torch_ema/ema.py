@@ -20,6 +20,7 @@ class ExponentialMovingAverage:
         """
         if decay < 0.0 or decay > 1.0:
             raise ValueError('Decay must be between 0 and 1')
+        self.collected_parameters = []
         self.decay = decay
         self.num_updates = 0 if use_num_updates else None
         self.shadow_params = [p.clone().detach()
@@ -54,9 +55,7 @@ class ExponentialMovingAverage:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             updated with the stored moving averages.
         """
-        self.collected_parameters = []
         for s_param, param in zip(self.shadow_params, parameters):
-            self.collected_parameters.append(param.clone())
             if param.requires_grad:
                 param.data.copy_(s_param.data)
 
