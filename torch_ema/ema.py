@@ -67,7 +67,9 @@ class ExponentialMovingAverage:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             temporarily stored.
         """
-        self.collected_params = [param.clone() for param in parameters]
+        self.collected_params = [param.clone()
+                                 for param in parameters
+                                 if param.requires_grad]
 
     def restore(self, parameters):
         """

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version__ = '0.1'
+__version__ = '0.2'
 url = 'https://github.com/fadel/pytorch_ema'
 download_url = '{}/archive/{}.tar.gz'.format(url, __version__)
 
