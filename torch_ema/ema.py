@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 import torch
 
 
-# Partially based on: https://github.com/tensorflow/tensorflow/blob/r1.13/tensorflow/python/training/moving_averages.py
+# Partially based on:
+# https://github.com/tensorflow/tensorflow/blob/r1.13/tensorflow/python/training/moving_averages.py
 class ExponentialMovingAverage:
     """
     Maintains (exponential) moving average of a set of parameters.
@@ -40,7 +41,10 @@ class ExponentialMovingAverage:
         decay = self.decay
         if self.num_updates is not None:
             self.num_updates += 1
-            decay = min(decay, (1 + self.num_updates) / (10 + self.num_updates))
+            decay = min(
+                decay,
+                (1 + self.num_updates) / (10 + self.num_updates)
+            )
         one_minus_decay = 1.0 - decay
         with torch.no_grad():
             parameters = [p for p in parameters if p.requires_grad]
@@ -51,7 +55,7 @@ class ExponentialMovingAverage:
         """
         Copy current parameters into given collection of parameters.
 
-        Args: 
+        Args:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             updated with the stored moving averages.
         """
@@ -63,7 +67,7 @@ class ExponentialMovingAverage:
         """
         Save the current parameters for restoring later.
 
-        Args: 
+        Args:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             temporarily stored.
         """
@@ -79,11 +83,10 @@ class ExponentialMovingAverage:
         `copy_to` method. After validation (or model saving), use this to
         restore the former parameters.
 
-        Args: 
+        Args:
           parameters: Iterable of `torch.nn.Parameter`; the parameters to be
             updated with the stored parameters.
         """
         for c_param, param in zip(self.collected_params, parameters):
             if param.requires_grad:
                 param.data.copy_(c_param.data)
-
