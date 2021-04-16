@@ -128,7 +128,6 @@ class ExponentialMovingAverage:
                                  for param in parameters
                                  if param.requires_grad]
 
-
     def restore(
         self,
         parameters: Optional[Iterable[torch.nn.Parameter]] = None
