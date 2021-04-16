@@ -40,6 +40,7 @@ def test_val_error(decay, use_num_updates, explicit_params):
     model.eval()
     logits = model(x_val)
     loss_orig = torch.nn.functional.cross_entropy(logits, y_val)
+    print(f"Original loss: {loss_orig}")
 
     # Validation: with EMA
     # First save original parameters before replacing with EMA version
@@ -55,6 +56,7 @@ def test_val_error(decay, use_num_updates, explicit_params):
     logits = model(x_val)
     loss_ema = torch.nn.functional.cross_entropy(logits, y_val)
 
+    print(f"EMA loss: {loss_ema}")
     assert loss_ema < loss_orig, "EMA loss wasn't lower"
 
     # Test restore
