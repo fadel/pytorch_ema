@@ -4,7 +4,7 @@ __version__ = '0.2'
 url = 'https://github.com/fadel/pytorch_ema'
 download_url = '{}/archive/{}.tar.gz'.format(url, __version__)
 
-install_requires = []
+install_requires = ["torch"]
 setup_requires = []
 tests_require = []
 
