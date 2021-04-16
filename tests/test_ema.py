@@ -45,7 +45,15 @@ def test_val_error(decay, use_num_updates):
     logits = model(x_val)
     loss_ema = torch.nn.functional.cross_entropy(logits, y_val)
 
-    assert loss_ema < loss_orig
+    assert loss_ema < loss_orig, "EMA loss wasn't lower"
+
+    # Test restore
+    ema.restore(model.parameters())
+    model.eval()
+    logits = model(x_val)
+    loss_orig2 = torch.nn.functional.cross_entropy(logits, y_val)
+    assert torch.allclose(loss_orig, loss_orig2), \
+        "Restored model wasn't the same as stored model"
 
 
 @pytest.mark.parametrize("decay", [0.995, 0.9, 0.0, 1.0])
