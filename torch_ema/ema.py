@@ -1,6 +1,8 @@
 from __future__ import division
 from __future__ import unicode_literals
 
+from typing import Iterable
+
 import torch
 
 
@@ -9,16 +11,20 @@ import torch
 class ExponentialMovingAverage:
     """
     Maintains (exponential) moving average of a set of parameters.
-    """
-    def __init__(self, parameters, decay, use_num_updates=True):
-        """
-        Args:
-          parameters: Iterable of `torch.nn.Parameter`; usually the result of
+
+    Args:
+        parameters: Iterable of `torch.nn.Parameter`; usually the result of
             `model.parameters()`.
-          decay: The exponential decay.
-          use_num_updates: Whether to use number of updates when computing
+        decay: The exponential decay.
+        use_num_updates: Whether to use number of updates when computing
             averages.
-        """
+    """
+    def __init__(
+        self,
+        parameters: Iterable[torch.nn.Parameter],
+        decay: float,
+        use_num_updates: bool = True
+    ):
         if decay < 0.0 or decay > 1.0:
             raise ValueError('Decay must be between 0 and 1')
         self.decay = decay
@@ -27,7 +33,7 @@ class ExponentialMovingAverage:
                               for p in parameters if p.requires_grad]
         self.collected_params = []
 
-    def update(self, parameters):
+    def update(self, parameters: Iterable[torch.nn.Parameter]) -> None:
         """
         Update currently maintained parameters.
 
@@ -51,7 +57,7 @@ class ExponentialMovingAverage:
             for s_param, param in zip(self.shadow_params, parameters):
                 s_param.sub_(one_minus_decay * (s_param - param))
 
-    def copy_to(self, parameters):
+    def copy_to(self, parameters: Iterable[torch.nn.Parameter]) -> None:
         """
         Copy current parameters into given collection of parameters.
 
@@ -63,7 +69,7 @@ class ExponentialMovingAverage:
             if param.requires_grad:
                 param.data.copy_(s_param.data)
 
-    def store(self, parameters):
+    def store(self, parameters: Iterable[torch.nn.Parameter]) -> None:
         """
         Save the current parameters for restoring later.
 
@@ -75,7 +81,7 @@ class ExponentialMovingAverage:
                                  for param in parameters
                                  if param.requires_grad]
 
-    def restore(self, parameters):
+    def restore(self, parameters: Iterable[torch.nn.Parameter]) -> None:
         """
         Restore the parameters stored with the `store` method.
         Useful to validate the model with EMA parameters without affecting the
