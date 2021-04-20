@@ -88,7 +88,10 @@ class ExponentialMovingAverage:
         with torch.no_grad():
             parameters = [p for p in parameters if p.requires_grad]
             for s_param, param in zip(self.shadow_params, parameters):
-                s_param.sub_(one_minus_decay * (s_param - param))
+                tmp = (s_param - param)
+                # tmp will be a new tensor so we can do in-place
+                tmp.mul_(one_minus_decay)
+                s_param.sub_(tmp)
 
     def copy_to(
         self,
@@ -124,6 +127,7 @@ class ExponentialMovingAverage:
         self.collected_params = [param.clone()
                                  for param in parameters
                                  if param.requires_grad]
+
 
     def restore(
         self,
