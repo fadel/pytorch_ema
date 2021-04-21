@@ -165,6 +165,28 @@ class ExponentialMovingAverage:
             if param.requires_grad:
                 param.data.copy_(c_param.data)
 
+    def to(self, device=None, dtype=None) -> None:
+        r"""Move internal buffers of the ExponentialMovingAverage to `device`.
+
+        Args:
+            device: like `device` argument to `torch.Tensor.to`
+        """
+        # .to() on the tensors handles None correctly
+        self.shadow_params = [
+            p.to(device=device, dtype=dtype)
+            if p.is_floating_point()
+            else p.to(device=device)
+            for p in self.shadow_params
+        ]
+        if self.collected_params is not None:
+            self.collected_params = [
+                p.to(device=device, dtype=dtype)
+                if p.is_floating_point()
+                else p.to(device=device)
+                for p in self.collected_params
+            ]
+        return
+
     def state_dict(self) -> dict:
         r"""Returns the state of the ExponentialMovingAverage as a dict."""
         # Following PyTorch conventions, references to tensors are returned:
