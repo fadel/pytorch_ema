@@ -166,6 +166,37 @@ class ExponentialMovingAverage:
             if param.requires_grad:
                 param.data.copy_(c_param.data)
 
+    @contextlib.contextmanager
+    def average_parameters(
+        self,
+        parameters: Optional[Iterable[torch.nn.Parameter]] = None
+    ):
+        r"""
+        Context manager for validation/inference with averaged parameters.
+
+        Equivalent to:
+
+            ema.store()
+            ema.copy_to()
+            try:
+                ...
+            finally:
+                ema.restore()
+
+        Args:
+            parameters: Iterable of `torch.nn.Parameter`; the parameters to be
+                updated with the stored parameters. If `None`, the
+                parameters with which this `ExponentialMovingAverage` was
+                initialized will be used.
+        """
+        parameters = self._get_parameters(parameters)
+        self.store(parameters)
+        self.copy_to(parameters)
+        try:
+            yield
+        finally:
+            self.restore(parameters)
+
     def to(self, device=None, dtype=None) -> None:
         r"""Move internal buffers of the ExponentialMovingAverage to `device`.
 
