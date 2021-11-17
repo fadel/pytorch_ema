@@ -1,6 +1,13 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
-__version__ = '0.2'
+# see https://packaging.python.org/guides/single-sourcing-package-version/
+version_dict = {}
+with open(Path(__file__).parents[0] / "torch_runstats/_version.py") as fp:
+    exec(fp.read(), version_dict)
+version = version_dict["__version__"]
+del version_dict
+
 url = 'https://github.com/fadel/pytorch_ema'
 download_url = '{}/archive/{}.tar.gz'.format(url, __version__)
 
@@ -10,7 +17,7 @@ tests_require = []
 
 setup(
     name='torch_ema',
-    version=__version__,
+    version=version,
     description='PyTorch library for computing moving averages of model parameters.',
     author='Samuel G. Fadel',
     author_email='samuelfadel@gmail.com',

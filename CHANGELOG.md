@@ -8,6 +8,10 @@ Most recent change on the bottom.
 
 ## [Unreleased]
 
+## [0.3.0] - 2021-11-17
+### Added
+- `torch_ema.__version__`
+
 ### Changed
 - Parameters without `requires_grad = True` are no longer partially ignored, resolving #9; now *all* parameters passed to the EMA object have EMA run on them, regardless of whether they are trainable or not. 
 
