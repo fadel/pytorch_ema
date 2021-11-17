@@ -8,7 +8,12 @@ or have suggestions for improvement, feel free to open either a new issue or
 pull request.
 
 ## Installation
+For the stable version from PyPI:
+```bash
+pip install torch-ema
+```
 
+For the latest GitHub version:
 ```
 pip install -U git+https://github.com/fadel/pytorch_ema
 ```
