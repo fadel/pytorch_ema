@@ -3,13 +3,13 @@ from pathlib import Path
 
 # see https://packaging.python.org/guides/single-sourcing-package-version/
 version_dict = {}
-with open(Path(__file__).parents[0] / "torch_runstats/_version.py") as fp:
+with open(Path(__file__).parents[0] / "torch_ema/_version.py") as fp:
     exec(fp.read(), version_dict)
 version = version_dict["__version__"]
 del version_dict
 
 url = 'https://github.com/fadel/pytorch_ema'
-download_url = '{}/archive/{}.tar.gz'.format(url, __version__)
+download_url = '{}/archive/{}.tar.gz'.format(url, version)
 
 install_requires = ["torch"]
 setup_requires = []
