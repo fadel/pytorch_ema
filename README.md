@@ -67,7 +67,7 @@ with ema.average_parameters():
 
 ### Manual validation mode
 
-While the `average_parameters()` context manager is convinient, you can also manually execute the same series of operations:
+While the `average_parameters()` context manager is convenient, you can also manually execute the same series of operations:
 ```python
 ema.store()
 ema.copy_to()
@@ -77,7 +77,7 @@ ema.restore()
 
 ### Custom parameters
 
-By default the methods of `ExponentialMovingAverage` act on the model parameters the object was constructed with, but any compatable iterable of parameters can be passed to any method (such as `store()`, `copy_to()`, `update()`, `restore()`, and `average_parameters()`):
+By default the methods of `ExponentialMovingAverage` act on the model parameters the object was constructed with, but any compatible iterable of parameters can be passed to any method (such as `store()`, `copy_to()`, `update()`, `restore()`, and `average_parameters()`):
 ```python
 model = torch.nn.Linear(10, 2)
 model2 = torch.nn.Linear(10, 2)
@@ -90,7 +90,7 @@ ema.copy_to(model2)
 
 ### Resuming training
 
-Like a PyTorch optimizer, `ExponentialMovingAverage` objects have `state_dict()`/`load_state_dict()` methods to allow pausing, serializing, and restarting training without loosing shadow parameters, stored parameters, or the update count.
+Like a PyTorch optimizer, `ExponentialMovingAverage` objects have `state_dict()`/`load_state_dict()` methods to allow pausing, serializing, and restarting training without losing shadow parameters, stored parameters, or the update count.
 
 ### GPU/device support
 
