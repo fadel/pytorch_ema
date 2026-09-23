@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> You should probably prefer `torch.optim.swa_utils.AveragedModel`
+> instead, which is more well-maintained. It additionally accounts for
+> some complex interactions with modules such as batch normalisation,
+> which carry extra state dependent on the weights themselves.
+
 # pytorch_ema
 
 A small library for computing exponential moving averages of model
